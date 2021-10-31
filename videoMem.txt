@@ -1,0 +1,54 @@
+.8086
+.model small
+.stack 2048
+
+dseg segment para public 'data'
+	texto byte 'Aula de TAC',0
+	linha byte 12
+	coluna byte 40
+dseg ends
+
+cseg segment para public 'code'
+	assume cs:cseg, ds:dseg
+
+main PROC
+	mov ax, dseg
+	mov ds, ax
+	mov ax, 0B800h
+	mov es, ax
+
+	; xor di, di		;iniciar no canto superior esquerdo
+	
+	mov al, linha		;iniciar num local do ecra (linha/coluna)
+	mov bl, 160
+	mul bl
+	mov di, ax
+	
+	mov al, coluna
+	mov bl, 2
+	mul bl
+	add di, ax
+
+	mov ah, 01110100b	;parametros da memoria de video
+	xor si, si
+
+ciclo:
+	mov al, texto[si]
+	cmp al, 0		; fim de string
+	je fim_ciclo
+	mov es:[di], al		; mostra no monitor (letra)
+	mov es:[di+1], ah	; mostro no monitor (atributos)
+	add di, 2		; avança um elemento	;160 - linha seguinte; 162 - diagonal
+	inc si
+	jmp ciclo 	
+
+fim_ciclo:
+
+	mov al, 0
+	mov ah, 4ch
+	int 21h
+main ENDP
+
+cseg ends
+
+end main

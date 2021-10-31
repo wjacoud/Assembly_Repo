@@ -1,0 +1,67 @@
+.8086
+.model small
+.stack 2048
+
+dseg segment para public 'data'
+     	; VARIAVEIS...
+     	notas		db 25,65,90,50,75,35,80
+	notastemp	db 7 dup(0)
+     	nelementos 	db 7
+
+dseg ends
+
+cseg segment para public 'code'
+     	assume cs:cseg, ds:dseg
+main proc
+     	mov ax, dseg
+     	mov ds, ax
+
+     	xor si,si
+     	xor di,di
+	xor ch,ch
+	mov cl,nelementos
+ciclo1:
+     	xor ax,ax
+     	add al,notas[si]
+     	inc si
+     	loop ciclo1
+	
+	mov bl,nelementos
+	div bl
+	xor si,si
+	xor ch,ch
+	mov cl,nelementos
+ciclo2:
+	xor bx,bx
+     	mov bl,notas[si]
+	cmp bl,ax
+	jb avanca
+
+	mov notastemp[di],bl
+	inc di
+avanca:
+     	inc si
+     	loop ciclo2
+
+	xor si,si
+	xor ch,ch
+	mov cl, nelementos
+ciclo3:
+	xor ax,ax
+	mov al,notastemp[si]
+	mov notas[si],al
+	loop ciclo3
+
+	mov nelementos,di
+
+     	mov al, o
+     	add di, 2
+     	int 21h
+
+main endp
+cseg ends
+
+end main
+
+
+BIZUUUU CBW CONVERTE AL PARA AX (8 PARA 16 BITS)

@@ -1,0 +1,56 @@
+==========
+INSTRUÇÕES
+==========
+
+MOVIMENTAÇÃO
+------------
+MOV  - Copia o calor do 2º operando (SRC) para o 1º operando (DEST)
+       DIA BYTE 24    ; Variaveis...     DS:0000 ---> | 18 | E4 07 | ...
+       ANO WORD 2020                     
+       -------------
+       MOV AX, ANO    ; AX -> 07E4h
+XCHG - Troca conteúdo dos operandos
+       XCHG CL, DIA   ; CX -> ==18h
+LEA  - Copia para o primeiro operando o "deslocamento" da variável
+       LEA AX, ANO    ; AX -> 0001h
+
+ARITMÉTICA
+----------
+Somar(+):       ADD - Soma os dois operandos e guarda resultado no primeiro
+                      ADD AL, 3    ; AL = AL + 3
+                ADC - Soma os dois operandos e a CARRY (flag) e guarda resultado ...
+                      ADC AX, 5    ; AX = AX + 5 + CARRY (1 bit = 0/1)
+                INC - Incrementa o operando
+                      INC AX       ; AX = AX + 1
+Subtrair(-):    SUB - Subtrai os dois operandos e guarda resultado no primeiro
+                      SUB AL, 3    ; AL = AL - 3
+                SBB - Subtrai os dois operandos e a CARRY (flag) e guarda resultado ...
+                      SBB AX, 5    ; AX = AX - 5 - CARRY (1 bit = 0/1)
+                DEC - Decrementa o operando
+                      DEC AX       ; AX = AX - 1
+Multiplicar(*): MUL (sem sinal) / IMUL (com sinal)
+                Operando(s) de  8 bits --->    AX = AL * Operando (8bits)
+                Operando(s) de 16 bits ---> DX:AX = AX * Operando (16 bits)
+                MOV AL, 15      ; Resultado 1500 = 15 * 10
+                MOV CL, 10
+                MUL CL          ; Operando de 8 bits... 
+Dividir(/):     DIV (sem sinal) / IDIV (sinal)
+                Operando(s) de  8 bits ---> AL =    AX / Operando (8bits)    AH = resto
+                Operando(s) de 16 bits ---> AX = DX:AX / Operando (16 bits)  DX = resto
+                MOV AX, 127     ; Quociente (AL): 31 = 127 / 4    Resto (AH): 3
+                MOV BL, 4
+                DIV BL          ; Operando de 8 bits... 
+Negar(+/-):     NEG - Complementos de 2 de um número
+                MOV AL, 28
+                NEG AL       ; AL = -28  (complementos de 2)
+
+LÓGICA
+------
+AND - Produto lógico - 'E'              (só dá '1' se ambos os bits forem '1')
+      AND AL, 00001111b                 ; forçar a '0' os 4 bits mais significativos do AL
+OR  - Soma lógica - 'OU'                (dá '1' se pelo menos dos bits for '1')
+      OR AL, 00001111b                  ; forçar a '1' os 4 bits menos significativos do AL
+XOR - Soma lógica exclusiva - 'EX-OR'   (só da '1' se apenas um dos bits for '1')
+      XOR AL, 00001111b                 ; inverter os 4 bits menos significativos do AL
+NOT - Complemento - 'NOT'               (inverte todos os bits do operando)
+      NOT AL                            ; inverte todos os bits do AL

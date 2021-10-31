@@ -1,0 +1,46 @@
+.8086
+.model small
+.stack 2048
+
+dseg segment para public 'data'
+	strPALAVRAS byte ’Tac,Arquiterura,Exame,ISEC,IPC’,0
+	POSICOES byte 2,’A’,12,’A’,2,’X’,1,’S’,3,’B’
+	strFINAL byte 32 dup(0)
+dseg ends
+
+main PROC
+	mov ax, dseg
+	mov ds, ax
+	
+	xor si, si
+	xor di, di
+	xor ax, ax
+	xor bx, bx
+
+ciclo:
+	mov al, strPALAVRAS[si]
+	mov ah, POSICOES[di]
+	mov cl, 1
+	cmp al, 0		; fim de string
+	je fim_ciclo
+	cmp al,’,‘		; fim da palavra
+	je fim_palavra
+	cmp cl, ah		; posição
+	je substitui
+	mov strFINAL[si],al
+
+substitui:
+	
+fim_palavra:		
+
+
+fim_ciclo:
+
+	mov al, 0
+	mov ah, 4ch
+	int 21h
+main ENDP
+
+cseg ends
+
+end main

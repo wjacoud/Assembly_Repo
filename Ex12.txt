@@ -1,0 +1,46 @@
+.8086
+.model small
+.stack 2048
+
+dseg segment para public 'data'
+     ; VARIAVEIS...
+
+     TEXTO BYTE ,54h,45h,58h,54h,4Fh,20H,44H,41H, 
+     NUMELEM BYTE 6H
+
+dseg ends
+
+cseg segment para public 'code'
+     assume cs:cseg, ds:dseg
+main proc
+     mov ax, dseg
+     mov ds, ax
+
+     ; CODIGO...
+
+     XOR SI, SI
+     XOR DI, DI
+     XOR CH, CH
+     MOV CL, NUMELEM
+CICLO:
+     XOR AH, AH
+     MOV AL, OLDVECTOR[SI]
+     MOV BL, 3                  ; PODE SER FORA DO CICLO
+     MUL BL                     ; MULTIPLICA
+     MOV NEWVECTOR[DI], AX
+     INC SI
+     ADD DI, 2
+     
+     LOOP CICLO
+
+     mov al, o
+     add di, 2
+     int 21h
+
+main endp
+cseg ends
+
+end main
+
+
+BIZUUUU CBW CONVERTE AL PARA AX (8 PARA 16 BITS)

@@ -1,0 +1,36 @@
+.8086
+.model small
+.stack 2048
+
+dseg segment para public 'data'
+dseg ends
+
+cseg segment para public 'code'
+	assume cs:cseg, ds:dseg
+
+main PROC
+	mov ax, dseg
+	mov ds, ax
+	mov ax, 0B800h				;memoria de video
+	mov es, ax
+
+	xor di, di				;iniciar no canto superior esquerdo
+	mov cx, 40*10				;pinta 10 linhas. 40 porque serao caracterizadas 2 colunas
+
+ciclo:
+	mov BYTE PTR es:[di], ' '		;PTR - byte pointer, para dar indicação do tamanho a reservar na memoria
+	mov BYTE PTR es:[di+1], 01000111b	;gray/red
+	add di, 2
+	mov BYTE PTR es:[di], ' '
+	mov BYTE PTR es:[di+1], 01110100b	;red/gray
+	add di, 2
+	loop ciclo
+
+	mov al, 0
+	mov ah, 4ch
+	int 21h
+main ENDP
+
+cseg ends
+
+end main
